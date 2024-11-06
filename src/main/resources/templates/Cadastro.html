@@ -4,19 +4,23 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 <meta charset="UTF-8">
-<title>Tela de Login</title>
+<title>Tela de Cadastro</title>
 </head>
 <body>
 
 	<div th:replace="~{menu :: menu}"></div>
-	<h2>Realize o login</h2>
+	<h2>Realize o cadastro</h2>
 	<form action="/mercado" method="post">
 		<div>
-			<label>Email: </label> 
+			<label>Nome: </label>
+			<input type="text" name="nome">
+		</div>
+		<div>
+			<label>Email: </label>
 			<input type="text" name="email">
 		</div>
 		<div>
-			<label>Senha: </label> 
+			<label>Senha: </label>
 			<input type="text" name="senha">
 		</div>
 		<div>
