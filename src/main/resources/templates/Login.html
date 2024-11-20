@@ -9,20 +9,24 @@
 <body>
 
 	<div th:replace="~{menu :: menu}"></div>
-	<h2>Realize o login</h2>
-	<form action="/mercado" method="post">
-		<div>
-			<label>Email: </label> 
-			<input type="text" name="email">
+	<div class="container">
+		<h2 align="center">Realize o login</h2>
+		<div class="card">
+			<div class="card-content">
+				<form action="/mercado/login" method="post">
+					<div>
+						<label>Email: </label> <input type="text" id="name" name="email" required>
+					</div>
+					<div>
+						<label>Senha: </label> <input type="password" id="senha" name="senha" required>
+					</div>
+					<div>
+						<button type="submit" class="waves-effect waves-light btn">Entrar</button>
+						<button type="reset" class="waves-effect waves-light btn">Limpar</button>
+					</div>
+				</form>
+			</div>
 		</div>
-		<div>
-			<label>Senha: </label> 
-			<input type="text" name="senha">
-		</div>
-		<div>
-			<button type="submit">Salvar</button>
-			<button type="reset">Limpar</button>
-		</div>
-	</form>
+	</div>	
 </body>
 </html>
