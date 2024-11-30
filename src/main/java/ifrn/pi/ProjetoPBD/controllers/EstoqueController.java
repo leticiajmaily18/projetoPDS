@@ -26,7 +26,7 @@ public class EstoqueController {
      * @return O nome da página do formulário.
      */
     @GetMapping("/form")
-    public String form() {
+    public String form(Estoque estoque) {
         return "Estoque/Gerenciador_do_Estoque"; // Nome da página HTML que contém o formulário
     }
     
@@ -36,7 +36,7 @@ public class EstoqueController {
      * @return Redireciona para a listagem dos produtos após salvar.
      */
     @PostMapping
-    public String adicionarProduto(Estoque estoque) {
+    public String Salvar(Estoque estoque) {
         System.out.println(estoque); // Exibe os dados do produto no console (apenas para depuração)
         estoquerepository.save(estoque); // Salva o objeto no banco de dados
         return "redirect:/Estoque"; // Redireciona para a página principal da listagem de produtos
@@ -48,10 +48,11 @@ public class EstoqueController {
      */
     @GetMapping
     public ModelAndView listar() {
-        List<Estoque> listagenDOEstoque = estoquerepository.findAll(); // Recupera todos os produtos do banco de dados
-        ModelAndView mv = new ModelAndView("Estoque/Gerenciador_do_Estoque"); // Configura a página de listagem
-        mv.addObject("listagenDOEstoque", listagenDOEstoque); // Adiciona a lista de produtos ao modelo
-        return mv; // Retorna a página configurada com os dados
+        List<Estoque> listagenDOEstoque = estoquerepository.findAll(); // Recupera todos os produtos
+        ModelAndView mv = new ModelAndView("Estoque/Gerenciador_do_Estoque"); // Configura a página
+        mv.addObject("listagenDOEstoque", listagenDOEstoque); // Adiciona a lista de produtos
+        mv.addObject("estoque", new Estoque()); // Adiciona um objeto vazio para o formulário
+        return mv; // Retorna a página configurada
     }
     
     @GetMapping("/{id}/removerP")
@@ -63,5 +64,22 @@ public class EstoqueController {
     		estoquerepository.delete(estoque);
     	}
     	return"redirect:/Estoque";
+    }
+    
+    @GetMapping("/{id}/selecionarP")
+    public ModelAndView selecionarEstoque(@PathVariable Long id) {
+    	ModelAndView md = new ModelAndView();
+    	Optional<Estoque> opt = estoquerepository.findById(id);
+    	if(opt.isEmpty()) {
+    		
+    		md.setViewName("redirect:/Estoque");
+    		return md;
+    	}
+    	
+    	Estoque estoque = opt.get();
+    	md.setViewName("Estoque/Gerenciador_do_Estoque");
+    	md.addObject("estoque", estoque);
+    	
+    	return md;
     }
 }

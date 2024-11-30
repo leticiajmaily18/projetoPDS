@@ -217,17 +217,20 @@ function formatarMoeda(input) {
 		<!-- Formulário para adicionar novos produtos -->
 		<div class="container">
 			<h1>ADICIONAR NOVO PRODUTO</h1>
-			<form action="/Estoque" method="post" th:object="${evento}">
+			<form action="/Estoque" method="post" th:object="${estoque}">
+			<div>
+			<input type="hidden" name="id" th:value="${estoque.id}" readonly="readonly">
+			</div>
 				<label for="nomeProduto">Nome Produto</label> <input type="text"
-					id="nomeProduto" name="nome" placeholder="Ex: Produto x"> <label
+					id="nomeProduto" name="nome" th:value="${estoque.nome}" placeholder="Ex: Produto x"> <label
 					for="urlDaImagem">URL Da imagem</label> <input type="text"
-					id="urlDaImagem" name="imagem"
+					id="urlDaImagem" name="imagem" th:value="${estoque.imagem}"
 					placeholder="Ex: https://imagem.com/produto.jpg"> <label
 					for="preco">Preço</label> <input type="text" id="preco"
-					name="preco" oninput="formatarMoeda(this)" placeholder="R$ 00,00">
+					name="preco" th:value="${estoque.preco}" oninput="formatarMoeda(this)" placeholder="R$ 00,00">
 
 				<label for="descricao">Descrição</label>
-				<textarea id="descricao" name="descricao"
+				<textarea id="descricao" name="descricao" th:value="${estoque.descricao}"
 					placeholder="Ex: Smartphone com 128GB de armazenamento, câmera de 12MP, etc."></textarea>
 
 				<button type="submit">PUBLICAR</button>
@@ -258,10 +261,10 @@ function formatarMoeda(input) {
 						<td th:text="${l.imagem}">URL da Imagem</td>
 						<td th:text="${l.preco}">Preço</td>
 						<td th:text="${l.descricao}">Descrição</td>
-						<td><a th:href="@{/Estoque/{id}/removerP(id=${l.id})}">
-						     <button style="padding: 5px 1px; font-size: 5px; border: none; cursor: pointer;">
-									<i class="material-icons" style="font-size: 16px;">delete</i>
-								</button></a></td>
+						<td>
+						<a th:href="@{/Estoque/{id}/selecionarP(id=${l.id})}"><button style="padding: 5px 1px; font-size: 5px; border: none; cursor: pointer;"><i class="material-icons" style="font-size: 16px;">edit</i></button></a>
+						<a th:href="@{/Estoque/{id}/removerP(id=${l.id})}"><button style="padding: 5px 1px; font-size: 5px; border: none; cursor: pointer;"><i class="material-icons" style="font-size: 16px;">delete</i></button></a>
+						</td>
 					</tr>
 				</tbody>
 			</table>
