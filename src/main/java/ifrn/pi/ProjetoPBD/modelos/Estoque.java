@@ -1,9 +1,11 @@
 package ifrn.pi.ProjetoPBD.modelos;
 
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Estoque {
@@ -11,9 +13,13 @@ public class Estoque {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotBlank
 	private String nome;
+	@NotBlank
 	private String imagem;
+	@NotBlank
 	private String preco;
+	@NotBlank
 	private String descricao;
 
 	public Long getId() {

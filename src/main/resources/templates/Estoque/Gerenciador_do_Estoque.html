@@ -218,20 +218,24 @@ function formatarMoeda(input) {
 		<div class="container">
 			<h1>ADICIONAR NOVO PRODUTO</h1>
 			<form action="/Estoque" method="post" th:object="${estoque}">
-			<div>
-			<input type="hidden" name="id" th:value="${estoque.id}" readonly="readonly">
-			</div>
+				<div>
+					<input type="hidden" th:field="*{id}" readonly="readonly">
+				</div>
 				<label for="nomeProduto">Nome Produto</label> <input type="text"
-					id="nomeProduto" name="nome" th:value="${estoque.nome}" placeholder="Ex: Produto x"> <label
-					for="urlDaImagem">URL Da imagem</label> <input type="text"
-					id="urlDaImagem" name="imagem" th:value="${estoque.imagem}"
-					placeholder="Ex: https://imagem.com/produto.jpg"> <label
-					for="preco">Preço</label> <input type="text" id="preco"
-					name="preco" th:value="${estoque.preco}" oninput="formatarMoeda(this)" placeholder="R$ 00,00">
-
+					id="nomeProduto" th:field="*{nome}" placeholder="Ex: Produto x">
+				<p th:errors="*{nome}"></p>
+				<label for="urlDaImagem">URL Da imagem</label> <input type="text"
+					id="urlDaImagem" th:field="*{imagem}"
+					placeholder="Ex: https://imagem.com/produto.jpg">
+				<p th:errors="*{imagem}"></p>
+				<label for="preco">Preço</label> <input type="text" id="preco"
+					th:field="*{preco}" oninput="formatarMoeda(this)"
+					placeholder="R$ 00,00">
+				<p th:errors="*{preco}"></p>
 				<label for="descricao">Descrição</label>
-				<textarea id="descricao" name="descricao" th:value="${estoque.descricao}"
+				<textarea id="descricao" th:field="*{descricao}"
 					placeholder="Ex: Smartphone com 128GB de armazenamento, câmera de 12MP, etc."></textarea>
+				<p th:errors="*{descricao}"></p>
 
 				<button type="submit">PUBLICAR</button>
 			</form>
@@ -261,10 +265,13 @@ function formatarMoeda(input) {
 						<td th:text="${l.imagem}">URL da Imagem</td>
 						<td th:text="${l.preco}">Preço</td>
 						<td th:text="${l.descricao}">Descrição</td>
-						<td>
-						<a th:href="@{/Estoque/{id}/selecionarP(id=${l.id})}"><button style="padding: 5px 1px; font-size: 5px; border: none; cursor: pointer;"><i class="material-icons" style="font-size: 16px;">edit</i></button></a>
-						<a th:href="@{/Estoque/{id}/removerP(id=${l.id})}"><button style="padding: 5px 1px; font-size: 5px; border: none; cursor: pointer;"><i class="material-icons" style="font-size: 16px;">delete</i></button></a>
-						</td>
+						<td><a th:href="@{/Estoque/{id}/selecionarP(id=${l.id})}"><button
+									style="padding: 5px 1px; font-size: 5px; border: none; cursor: pointer;">
+									<i class="material-icons" style="font-size: 16px;">edit</i>
+								</button></a> <a th:href="@{/Estoque/{id}/removerP(id=${l.id})}"><button
+									style="padding: 5px 1px; font-size: 5px; border: none; cursor: pointer;">
+									<i class="material-icons" style="font-size: 16px;">delete</i>
+								</button></a></td>
 					</tr>
 				</tbody>
 			</table>

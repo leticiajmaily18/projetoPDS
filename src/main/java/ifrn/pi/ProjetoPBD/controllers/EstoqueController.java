@@ -5,14 +5,17 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ifrn.pi.ProjetoPBD.modelos.Estoque;
 import ifrn.pi.ProjetoPBD.repositories.EstoqueRepository;
+import jakarta.validation.Valid;
 
 @Controller // Define que esta classe é um controlador do Spring
 @RequestMapping("/Estoque") // Define o caminho base para os mapeamentos deste controlador
@@ -36,9 +39,16 @@ public class EstoqueController {
      * @return Redireciona para a listagem dos produtos após salvar.
      */
     @PostMapping
-    public String Salvar(Estoque estoque) {
+    public String Salvar(@Valid Estoque estoque, BindingResult result, RedirectAttributes attributes) {
+    	
+    	if(result.hasErrors()) {
+    		return form(estoque);
+    	}
+    	
         System.out.println(estoque); // Exibe os dados do produto no console (apenas para depuração)
         estoquerepository.save(estoque); // Salva o objeto no banco de dados
+        
+        attributes.addFlashAttribute("mensagem", "Produto salvo com sucesso!");
         return "redirect:/Estoque"; // Redireciona para a página principal da listagem de produtos
     }
     
@@ -56,13 +66,15 @@ public class EstoqueController {
     }
     
     @GetMapping("/{id}/removerP")
-    public String apagardoEstoque(@PathVariable Long id){
+    public String apagardoEstoque(@PathVariable Long id, BindingResult result, RedirectAttributes attributes){
     	Optional<Estoque> opt = estoquerepository.findById(id);
     	
     	if(!opt.isEmpty()){
     		Estoque estoque = opt.get();
     		estoquerepository.delete(estoque);
     	}
+    	
+    	attributes.addFlashAttribute("mensagem", "Produto removido com sucesso!");
     	return"redirect:/Estoque";
     }
     

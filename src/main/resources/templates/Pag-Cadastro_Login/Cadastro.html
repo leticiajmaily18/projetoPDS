@@ -128,21 +128,26 @@
 
     <div class="container">
         <h2>Realize o Cadastro</h2>
+        
+        <p th:if="${mensagem}" th:text="${mensagem}"></p>
         <div class="card">
             <div class="card-content">
                 <!-- Formulário de cadastro -->
-                <form th:action="@{/mercado/cadastro}" method="post">
+                <form th:action="@{/mercado/cadastro}" method="post" th:object="${funcionario}">
                     <div class="input-field">
                         <label for="nome">Nome: </label>
-                        <input type="text" name="nome" required>
+                        <input type="text" th:field="*{nome}" required>
+                        <p th:errors="*{nome}"></p>
                     </div>
                     <div class="input-field">
                         <label for="email">Email: </label>
-                        <input type="email" name="email" required>
+                        <input type="email" th:field="*{email}" required>
+                        <p th:errors="*{email}"></p>
                     </div>
                     <div class="input-field">
                         <label for="senha">Senha: </label>
-                        <input type="password" name="senha" required>
+                        <input type="password" th:field="*{senha}" required>
+                        <p th:errors="*{senha}"></p>
                     </div>
 
                     <!-- Título para seleção de tipo de usuário -->
