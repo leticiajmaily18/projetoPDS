@@ -133,40 +133,20 @@
         <div class="card">
             <div class="card-content">
                 <!-- Formulário de cadastro -->
-                <form th:action="@{/mercado/cadastro}" method="post" th:object="${funcionario}">
+               <form th:action="@{/mercado/cadastro}" method="post">
                     <div class="input-field">
                         <label for="nome">Nome: </label>
-                        <input type="text" th:field="*{nome}" required>
-                        <p th:errors="*{nome}"></p>
+                         <input type="text" name="nome" required>
                     </div>
                     <div class="input-field">
-                        <label for="email">Email: </label>
-                        <input type="email" th:field="*{email}" required>
-                        <p th:errors="*{email}"></p>
+                     	<label for="nome">email: </label>
+                        <input type="email" name="email" required>
                     </div>
                     <div class="input-field">
-                        <label for="senha">Senha: </label>
-                        <input type="password" th:field="*{senha}" required>
-                        <p th:errors="*{senha}"></p>
+                    	<label for="nome">senha: </label>
+                        <input type="password" name="senha" required>
                     </div>
 
-                    <!-- Título para seleção de tipo de usuário -->
-                    <div class="user-type-title">
-                        <p>Selecione o Tipo de Usuário</p>
-                    </div>
-
-                    <!-- Seleção de tipo de usuário (funcionário ou cliente) -->
-                    <div class="user-type-container">
-                        <label>
-                            <input type="radio" name="tipo" value="funcionario" required>
-                            Funcionário
-                        </label>
-                        <label>
-                            <input type="radio" name="tipo" value="cliente" required>
-                            Cliente
-                        </label>
-                    </div>
-                    
                     <div class="button-container">
                         <button type="submit" class="waves-effect waves-light btn">Salvar</button>
                         <button type="reset" class="waves-effect waves-light btn btn-secondary">Limpar</button>

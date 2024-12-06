@@ -66,7 +66,7 @@ public class EstoqueController {
     }
     
     @GetMapping("/{id}/removerP")
-    public String apagardoEstoque(@PathVariable Long id, BindingResult result, RedirectAttributes attributes){
+    public String apagardoEstoque(@PathVariable Long id, RedirectAttributes attributes){
     	Optional<Estoque> opt = estoquerepository.findById(id);
     	
     	if(!opt.isEmpty()){
