@@ -14,24 +14,31 @@ import ifrn.pi.ProjetoPBD.repositories.CadastroRepository;
 @Controller
 public class LoginController {
 
-    @Autowired
-    private CadastroRepository cr;
+	@Autowired
+	private CadastroRepository cr;
 
-    @GetMapping("/mercado/login")
-    public String loginPage() {
-        return "Pag-Cadastro_Login/Login";
-    }
+	@GetMapping("/mercado/login")
+	public String loginPage() {
+		return "Pag-Cadastro_Login/Login";
+	}
 
-    @PostMapping("/mercado/login")
-    public String login(@RequestParam String email, @RequestParam String senha, Model model, RedirectAttributes attributes) {
-        Funcionario funcionario = cr.findByEmail(email);
+	@PostMapping("/mercado/login")
+	public String login(@RequestParam String email, @RequestParam String senha, Model model,
+			RedirectAttributes attributes) {
+		Funcionario funcionario = cr.findByEmail(email);
 
-        if (funcionario != null && funcionario.getSenha().equals(senha)) {
-        	attributes.addFlashAttribute("mensagem", "O login já foi realizado com sucesso. Acesse o estoque! :D");
-            return "redirect:/cadastro";
-        } else {
-            model.addAttribute("erro", "Email ou senha incorretos!");
-            return "Login";
-        }
-    }
+		if (funcionario != null && funcionario.getSenha().equals(senha)) {
+			attributes.addFlashAttribute("mensagem", "O login já foi realizado com sucesso. Acesse o estoque! :D");
+			return "redirect:/Estoque";
+		} else {
+			model.addAttribute("erro", "Email ou senha incorretos!");
+			return "Login";
+		}
+
+	}
+
+	@GetMapping("/logout")
+	public String logout() {
+		return "Pag-Cadastro_Login/logout";
+	}
 }
