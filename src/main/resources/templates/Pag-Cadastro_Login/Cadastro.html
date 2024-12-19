@@ -128,25 +128,40 @@
 
     <div class="container">
         <h2>Realize o Cadastro</h2>
-        
-        <p th:if="${mensagem}" th:text="${mensagem}"></p>
         <div class="card">
             <div class="card-content">
                 <!-- Formulário de cadastro -->
-               <form th:action="@{/mercado/cadastro}" method="post">
+                <form th:action="@{/mercado/cadastro}" method="post">
                     <div class="input-field">
                         <label for="nome">Nome: </label>
-                         <input type="text" name="nome" required>
+                        <input type="text" name="nome" required>
                     </div>
                     <div class="input-field">
-                     	<label for="nome">email: </label>
+                        <label for="email">Email: </label>
                         <input type="email" name="email" required>
                     </div>
                     <div class="input-field">
-                    	<label for="nome">senha: </label>
+                        <label for="senha">Senha: </label>
                         <input type="password" name="senha" required>
                     </div>
 
+                    <!-- Título para seleção de tipo de usuário -->
+                    <div class="user-type-title">
+                        <p>Selecione o Tipo de Usuário</p>
+                    </div>
+
+                    <!-- Seleção de tipo de usuário (funcionário ou cliente) -->
+                    <div class="user-type-container">
+                        <label>
+                            <input type="radio" name="tipo" value="funcionario" required>
+                            Funcionário
+                        </label>
+                        <label>
+                            <input type="radio" name="tipo" value="cliente" required>
+                            Cliente
+                        </label>
+                    </div>
+                    
                     <div class="button-container">
                         <button type="submit" class="waves-effect waves-light btn">Salvar</button>
                         <button type="reset" class="waves-effect waves-light btn btn-secondary">Limpar</button>

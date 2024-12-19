@@ -5,93 +5,92 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ifrn.pi.ProjetoPBD.modelos.Estoque;
 import ifrn.pi.ProjetoPBD.repositories.EstoqueRepository;
-import jakarta.validation.Valid;
 
-@Controller // Define que esta classe é um controlador do Spring
-@RequestMapping("/Estoque") // Define o caminho base para os mapeamentos deste controlador
+@Controller
+@RequestMapping("/Estoque")
 public class EstoqueController {
 
-    @Autowired // Injeta automaticamente uma instância de EstoqueRepository
+    @Autowired
     private EstoqueRepository estoquerepository;
 
-    /**
-     * Método que exibe o formulário para gerenciar o estoque.
-     * @return O nome da página do formulário.
-     */
     @GetMapping("/form")
     public String form(Estoque estoque) {
-        return "Estoque/Gerenciador_do_Estoque"; // Nome da página HTML que contém o formulário
+        return "Estoque/Gerenciador_do_Estoque";
     }
-    
-    /**
-     * Método que adiciona um produto ao banco de dados.
-     * @param estoque Objeto que contém os dados do produto a ser salvo.
-     * @return Redireciona para a listagem dos produtos após salvar.
-     */
+
     @PostMapping
-    public String Salvar(@Valid Estoque estoque, BindingResult result, RedirectAttributes attributes) {
-    	
-    	if(result.hasErrors()) {
-    		return form(estoque);
-    	}
-    	
-        System.out.println(estoque); // Exibe os dados do produto no console (apenas para depuração)
-        estoquerepository.save(estoque); // Salva o objeto no banco de dados
-        
-        attributes.addFlashAttribute("mensagem", "Produto salvo com sucesso!");
-        return "redirect:/Estoque"; // Redireciona para a página principal da listagem de produtos
+    public String Salvar(Estoque estoque) {
+        estoquerepository.save(estoque);
+        return "redirect:/Estoque";
     }
-    
-    /**
-     * Método que lista todos os produtos cadastrados no banco de dados.
-     * @return Um ModelAndView com a página de listagem e os produtos cadastrados.
-     */
+
     @GetMapping
     public ModelAndView listar() {
-        List<Estoque> listagenDOEstoque = estoquerepository.findAll(); // Recupera todos os produtos
-        ModelAndView mv = new ModelAndView("Estoque/Gerenciador_do_Estoque"); // Configura a página
-        mv.addObject("listagenDOEstoque", listagenDOEstoque); // Adiciona a lista de produtos
-        mv.addObject("estoque", new Estoque()); // Adiciona um objeto vazio para o formulário
-        return mv; // Retorna a página configurada
+        List<Estoque> listagenDOEstoque = estoquerepository.findAll();
+        List<Estoque> produtosEsgotados = estoquerepository.findByQuantidade(0);  // Produtos com quantidade zero
+        ModelAndView mv = new ModelAndView("Estoque/Gerenciador_do_Estoque");
+        mv.addObject("listagenDOEstoque", listagenDOEstoque);
+        mv.addObject("produtosEsgotados", produtosEsgotados);  // Lista de produtos esgotados
+        mv.addObject("estoque", new Estoque());
+        return mv;
     }
-    
+
     @GetMapping("/{id}/removerP")
-    public String apagardoEstoque(@PathVariable Long id, RedirectAttributes attributes){
-    	Optional<Estoque> opt = estoquerepository.findById(id);
-    	
-    	if(!opt.isEmpty()){
-    		Estoque estoque = opt.get();
-    		estoquerepository.delete(estoque);
-    	}
-    	
-    	attributes.addFlashAttribute("mensagem", "Produto removido com sucesso!");
-    	return"redirect:/Estoque";
+    public String apagardoEstoque(@PathVariable Long id) {
+        Optional<Estoque> opt = estoquerepository.findById(id);
+        if (opt.isPresent()) {
+            Estoque estoque = opt.get();
+            estoquerepository.delete(estoque);
+        }
+        return "redirect:/Estoque";
     }
-    
+
     @GetMapping("/{id}/selecionarP")
     public ModelAndView selecionarEstoque(@PathVariable Long id) {
-    	ModelAndView md = new ModelAndView();
-    	Optional<Estoque> opt = estoquerepository.findById(id);
-    	if(opt.isEmpty()) {
-    		
-    		md.setViewName("redirect:/Estoque");
-    		return md;
-    	}
-    	
-    	Estoque estoque = opt.get();
-    	md.setViewName("Estoque/Gerenciador_do_Estoque");
-    	md.addObject("estoque", estoque);
-    	
-    	return md;
+        ModelAndView md = new ModelAndView();
+        Optional<Estoque> opt = estoquerepository.findById(id);
+        if (opt.isEmpty()) {
+            md.setViewName("redirect:/Estoque");
+            return md;
+        }
+        Estoque estoque = opt.get();
+        md.setViewName("Estoque/Gerenciador_do_Estoque");
+        md.addObject("estoque", estoque);
+        return md;
+    }
+
+    @GetMapping("/comprar/{id}")
+    public ModelAndView comprarProduto(@PathVariable("id") Long id) {
+        ModelAndView mv = new ModelAndView("redirect:/home");
+
+        Optional<Estoque> opt = estoquerepository.findById(id);
+        if (opt.isPresent()) {
+            Estoque produto = opt.get();
+            if (produto.getQuantidade() > 0) {
+                produto.setQuantidade(produto.getQuantidade() - 1);
+                estoquerepository.save(produto);
+            } else {
+                mv.setViewName("redirect:/Estoque");
+            }
+        }
+
+        return mv;
+    }
+
+    @GetMapping("/estoque/esgotados")
+    public ModelAndView listarProdutosEsgotados() {
+        List<Estoque> produtosEsgotados = estoquerepository.findByQuantidade(0);  // Consulta para produtos esgotados
+        
+        ModelAndView mv = new ModelAndView("Estoque/Gerenciador_do_Estoque");
+        mv.addObject("produtosEsgotados", produtosEsgotados);  // Passa os produtos esgotados
+        return mv;
     }
 }
