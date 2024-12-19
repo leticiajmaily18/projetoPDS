@@ -106,16 +106,13 @@ table th {
 </style>
 
 <script>
-/**
- * Formata o campo de entrada para o formato monetário (R$)
- * @param {HTMLInputElement} input - Campo que será formatado
- */
+/** Formata o campo de entrada para o formato monetário (R$) */
 function formatarMoeda(input) {
 	let valor = input.value.replace(/\D/g, ""); // Remove caracteres não numéricos
 	valor = (valor / 100).toFixed(2) + ""; // Formata com duas casas decimais
 	valor = valor.replace(".", ","); // Substitui ponto por vírgula
-	valor = "R$ " + valor; // Adiciona o símbolo de moeda
-	input.value = valor; // Atualiza o campo
+	valor = "R$ " + valor; 
+	input.value = valor; 
 }
 
 /**
@@ -128,7 +125,7 @@ function validarQuantidade(input) {
 	if (!/^\d+$/.test(valor)) {
 		input.setCustomValidity("Digite apenas números inteiros.");
 	} else {
-		input.setCustomValidity(""); // Limpa a mensagem de erro
+		input.setCustomValidity(""); 
 	}
 }
 </script>
@@ -186,7 +183,7 @@ function validarQuantidade(input) {
 					</tr>
 				</thead>
 				<tbody>
-					<!-- Thymeleaf itera sobre a lista de produtos -->
+					<!-- Thymeleaf para a exibição da lista de produtos -->
 					<tr th:each="l : ${listagenDOEstoque}">
 						<td th:text="${l.id}">ID</td>
 						<td th:text="${l.nome}">Nome</td>
@@ -214,7 +211,7 @@ function validarQuantidade(input) {
 	</div>
 
 	<!-- Área de rolagem para exibir os produtos esgotados -->
-	<div class="scroll-container">
+	<div class="scroll-container"  style="position: relative; left: 120px;">
     <h1>Produtos Esgotados</h1>
 
     <!-- Tabela para exibir os produtos esgotados -->
@@ -231,7 +228,7 @@ function validarQuantidade(input) {
             </tr>
         </thead>
         <tbody>
-            <!-- Itera sobre a lista de produtos esgotados -->
+            <!-- <!-- Thymeleaf para a exibição da lista de produtos esgotados -->
             <tr th:each="produto : ${produtosEsgotados}">
                 <td th:text="${produto.id}">ID</td>
                 <td th:text="${produto.nome}">Nome</td>
@@ -248,7 +245,7 @@ function validarQuantidade(input) {
             </tr>
         </tbody>
     </table>
-</div>   so  essa  parte e que eu quero  que se mova
+</div>   
 
 </body>
 
